@@ -86,7 +86,9 @@ namespace ariel
         }
     }
     // AscendingIterator copy constructor
-    MagicalContainer::AscendingIterator::AscendingIterator(const AscendingIterator& other) : currElement(other.currElement)
+
+    MagicalContainer::AscendingIterator::AscendingIterator(const AscendingIterator& other)
+            : container(other.container), currElement(other.currElement)
     {
     }
     // AscendingIterator destructor
@@ -106,7 +108,6 @@ namespace ariel
         }
     }
 
-    // AscendingIterator operator++ (prefix) - move to next element in container (in ascending order)
     MagicalContainer::AscendingIterator& MagicalContainer::AscendingIterator::operator++()
     {
         // If the iterator is not at the end of the container, move to the next element
@@ -120,6 +121,7 @@ namespace ariel
         }
         return *this;
     }
+
     //return the begining of the container
     MagicalContainer::AscendingIterator& MagicalContainer::AscendingIterator::begin() {
         currElement = container->elements.begin(); // or wherever the beginning is for this iterator
