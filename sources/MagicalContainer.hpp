@@ -14,10 +14,8 @@ namespace ariel
     {
     private:
 
-        ///////////////////////Iterators inside classes////////////////////////////////////////
-        class Iterator
-        {
-        protected:
+        class Iterator {
+        private:
             int *currElement;
 
         public:
@@ -26,13 +24,13 @@ namespace ariel
             virtual ~Iterator() = default;
             virtual int &operator*() = 0;
             virtual Iterator &operator++() = 0;
-            Iterator &operator=(const Iterator &other) = delete;  // Add this line
+            Iterator &operator=(const Iterator &other) = delete;
+            Iterator &operator=(Iterator &&other) = delete;
             Iterator(Iterator &&other) noexcept = delete;
             virtual Iterator &begin() = 0;
             virtual Iterator &end() = 0;
 
-            void setCurrentElement(int *element)
-            {
+            void setCurrentElement(int *element) {
                 currElement = element;
             }
         };
@@ -52,7 +50,7 @@ namespace ariel
             AscendingIterator(const AscendingIterator &other);
             ~AscendingIterator() override;
             AscendingIterator &operator=(const AscendingIterator &other);
-            AscendingIterator &operator=(AscendingIterator &&other) noexcept; // Added this line
+            AscendingIterator &operator=(AscendingIterator &&other) noexcept; // Move assignment operator
             bool operator==(const AscendingIterator &other) const;
             bool operator!=(const AscendingIterator &other) const;
             bool operator<(const AscendingIterator &other) const;
@@ -61,7 +59,7 @@ namespace ariel
             AscendingIterator &operator++() override;
             AscendingIterator& begin() override;
             AscendingIterator& end() override;
-            AscendingIterator(AscendingIterator &&other) noexcept;
+            AscendingIterator(AscendingIterator &&other) noexcept; // Move constructor
         };
 
         class SideCrossIterator : public Iterator
