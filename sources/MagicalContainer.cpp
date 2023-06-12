@@ -89,7 +89,7 @@ namespace ariel
     MagicalContainer::AscendingIterator::AscendingIterator(const AscendingIterator& other) : currElement(other.currElement)
     {
     }
-    //
+    // AscendingIterator destructor
     MagicalContainer::AscendingIterator::~AscendingIterator()
     {
     }
@@ -106,9 +106,10 @@ namespace ariel
         }
     }
 
-
+    // AscendingIterator operator++ (prefix) - move to next element in container (in ascending order)
     MagicalContainer::AscendingIterator& MagicalContainer::AscendingIterator::operator++()
     {
+        // If the iterator is not at the end of the container, move to the next element
         if (currElement != container->elements.end())
         {
             ++currElement;
@@ -119,21 +120,23 @@ namespace ariel
         }
         return *this;
     }
-
+    //return the begining of the container
     MagicalContainer::AscendingIterator& MagicalContainer::AscendingIterator::begin() {
         currElement = container->elements.begin(); // or wherever the beginning is for this iterator
         return *this;
     }
-
+    //return the end of the container
     MagicalContainer::AscendingIterator& MagicalContainer::AscendingIterator::end() {
         currElement = container->elements.end(); // or wherever the end is for this iterator
         return *this;
     }
-
+    //operator= for AscendingIterator
     MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other)
     {
+        // Check for self-assignment
         if (this != &other)
         {
+            // Check that the iterators are from the same container
             if (container != other.container) {
                 throw std::runtime_error("Assigning iterators from different containers is not allowed!");
             }
@@ -142,7 +145,7 @@ namespace ariel
         }
         return *this;
     }
-
+    //noexcept operator= for AscendingIterator
     MagicalContainer::AscendingIterator& MagicalContainer::AscendingIterator::operator=(AscendingIterator&& other) noexcept
     {
         if (this != &other)
@@ -152,7 +155,6 @@ namespace ariel
         }
         return *this;
     }
-
     MagicalContainer::AscendingIterator::AscendingIterator(AscendingIterator&& other) noexcept
             : container(other.container), currElement(other.currElement)
     {
@@ -160,7 +162,7 @@ namespace ariel
         other.currElement = container->elements.end();
     }
 
-
+    //bool operators for AscendingIterator
 
     bool MagicalContainer::AscendingIterator::operator==(const AscendingIterator& other) const
     {
@@ -195,6 +197,7 @@ namespace ariel
             : Iterator(), container(&container), currStartElement(nullptr),
               currEndElement(nullptr), fromStart(true), progress(0)
     {
+        // If the container is not empty, initialize the iterator to point to the first and last elements
         if (!container.elements.empty())
         {
             currStartElement = container.elements.begin();
@@ -211,15 +214,19 @@ namespace ariel
 
     MagicalContainer::SideCrossIterator::~SideCrossIterator()
     {
+        // Destructor
     }
 
     MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator& other)
     {
         if (this != &other)
         {
+            // Check if the iterators belong to different containers
             if (container != other.container) {
                 throw std::runtime_error("Assigning iterators from different containers is not allowed!");
             }
+
+            // Copy the values from the other iterator
             container = other.container;
             currStartElement = other.currStartElement;
             currEndElement = other.currEndElement;
@@ -235,16 +242,19 @@ namespace ariel
 
     bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator& other) const
     {
+        // Check if the container and progress of the iterators are equal
         return container == other.container && progress == other.progress;
     }
 
     bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator& other) const
     {
+        // Inverse of the equality operator
         return !(*this == other);
     }
 
     bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator& other) const
     {
+        // Check if the iterators belong to different containers
         if (container != other.container)
         {
             throw std::runtime_error("Comparing iterators from different containers is not allowed!");
@@ -266,6 +276,7 @@ namespace ariel
 
     bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator& other) const
     {
+        // Check if the iterators belong to different containers
         if (container != other.container)
         {
             throw std::runtime_error("Comparing iterators from different containers is not allowed!");
@@ -275,6 +286,7 @@ namespace ariel
     }
 
     int& MagicalContainer::SideCrossIterator::operator*() {
+        // Dereference operator
         if (fromStart) {
             if (currStartElement <= currEndElement) {
                 return *currStartElement;
@@ -287,8 +299,8 @@ namespace ariel
         throw std::runtime_error("Iterator out of bounds");
     }
 
-
     MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::operator++() {
+        // Pre-increment operator
         if (fromStart) {
             if (currStartElement <= currEndElement) {
                 ++currStartElement;
@@ -309,8 +321,8 @@ namespace ariel
         return *this;
     }
 
-
     MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::begin() {
+        // Set the iterator to the beginning state
         currStartElement = container->elements.begin();
         currEndElement = container->elements.end() - 1;
         fromStart = true;
@@ -319,6 +331,7 @@ namespace ariel
     }
 
     MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::end() {
+        // Set the iterator to the end state
         currStartElement = container->elements.end();
         currEndElement = container->elements.begin() - 1;
         fromStart = false;
@@ -331,6 +344,7 @@ namespace ariel
               currEndElement(other.currEndElement), fromStart(other.fromStart),
               progress(other.progress)
     {
+        // Move constructor
         other.currStartElement = container->elements.end();
         other.currEndElement = container->elements.end();
     }
@@ -339,6 +353,7 @@ namespace ariel
     {
         if (this != &other)
         {
+            // Move the values from the other iterator
             container = other.container;
             fromStart = other.fromStart;
             progress = other.progress;
@@ -352,16 +367,19 @@ namespace ariel
     MagicalContainer::PrimeIterator::PrimeIterator()
             : Iterator(), container(nullptr), currElement()
     {
+        // Default constructor
     }
 
     MagicalContainer::PrimeIterator::PrimeIterator(MagicalContainer& container)
             : Iterator(), container(&container), currElement(container.elements.end())
     {
+        // Constructor that takes a container
         if (container.elements.empty())
         {
             return;
         }
 
+        // Initialize the iterator to the first prime element in the container
         currElement = container.elements.begin();
         while (currElement != container.elements.end() && !isPrime(*currElement))
         {
@@ -372,19 +390,23 @@ namespace ariel
     MagicalContainer::PrimeIterator::PrimeIterator(const PrimeIterator& other)
             : Iterator(), container(other.container), currElement(other.currElement)
     {
+        // Copy constructor
     }
 
     MagicalContainer::PrimeIterator::~PrimeIterator()
     {
+        // Destructor
     }
 
     MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::operator=(const PrimeIterator& other)
     {
         if (this != &other)
         {
+            // Check if the iterators belong to different containers
             if (container != other.container) {
                 throw std::runtime_error("Assigning iterators from different containers is not allowed!");
             }
+            // Copy the values from the other iterator
             container = other.container;
             currElement = other.currElement;
         }
@@ -396,26 +418,31 @@ namespace ariel
 
     bool MagicalContainer::PrimeIterator::operator==(const PrimeIterator& other) const
     {
+        // Check if the current elements of the iterators are equal
         return currElement == other.currElement;
     }
 
     bool MagicalContainer::PrimeIterator::operator!=(const PrimeIterator& other) const
     {
+        // Inverse of the equality operator
         return !(*this == other);
     }
 
     bool MagicalContainer::PrimeIterator::operator<(const PrimeIterator& other) const
     {
+        // Compare the current elements of the iterators
         return currElement < other.currElement;
     }
 
     bool MagicalContainer::PrimeIterator::operator>(const PrimeIterator& other) const
     {
+        // Compare the current elements of the iterators
         return currElement > other.currElement;
     }
 
     int& MagicalContainer::PrimeIterator::operator*()
     {
+        // Dereference operator
         if (currElement != container->elements.end())
         {
             return *currElement;
@@ -425,9 +452,11 @@ namespace ariel
 
     MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::operator++()
     {
+        // Pre-increment operator
         if (currElement != container->elements.end())
         {
             ++currElement;
+            // Find the next prime element in the container
             while (currElement != container->elements.end() && !isPrime(*currElement))
             {
                 ++currElement;
@@ -441,22 +470,25 @@ namespace ariel
     }
 
     MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::begin() {
+        // Set the iterator to the beginning state
         currElement = container->elements.begin();
         if (currElement != container->elements.end() && !isPrime(*currElement)) {
+            // Find the first prime element in the container
             ++(*this);
         }
         return *this;
     }
 
     MagicalContainer::PrimeIterator& MagicalContainer::PrimeIterator::end() {
+        // Set the iterator to the end state
         currElement = container->elements.end();
         return *this;
     }
 
-
     MagicalContainer::PrimeIterator::PrimeIterator(PrimeIterator&& other) noexcept
             : Iterator(), container(other.container), currElement(other.currElement)
     {
+        // Move constructor
         other.currElement = other.container->elements.end();
     }
 
@@ -464,6 +496,7 @@ namespace ariel
     {
         if (this != &other)
         {
+            // Move the values from the other iterator
             container = other.container;
             currElement = other.currElement;
             other.currElement = other.container->elements.end();
@@ -473,6 +506,7 @@ namespace ariel
     }
 
     bool MagicalContainer::PrimeIterator::isPrime(int num){
+        // Function to check if a number is prime
         if(num <= 1){
             return false;
         }
@@ -483,5 +517,4 @@ namespace ariel
         }
         return true;
     }
-
 }
